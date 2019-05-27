@@ -1,0 +1,37 @@
+Final Project Part A	
+
+Name: Milo Chase               ONID: chasemil
+Name: Daniel Gonzalez       ONID:  gonzald3
+Name: Tingting Lin              ONID: lintin
+
+Unit Test Description
+
+The is valid function takes two arguments, an object for the url and a long containing the options.It then makes a new object UrlValidator “urlVal”  it loads it with the options that are passed in the argument then does a quick test to assert that it is working by testing http://www.google.com is valid and that http://www.google.com/ is also valid.		
+Then it builds a string in a for loop nested in a do while loop. It uses the testsPartsIndexIndex to build a string in this loop appending the the testbuffer to build this string. Once it exits the for loop it sets url to the now created string. It then calls urlVal function isValid with the new url string. And then asserts it is equal. It then prints out the url. Once it exits the while loop, when the index gets to the end of the testObjects, it prints the status. 				 			
+		 	 	 		
+Unit Test Data
+            The total number of unique URL being tested is 64800, and the total number URL tested is 108000. testIsValid() builds the URLs by looping through each of the possible permutations of scheme, authority, port, path, and query. There are 8 different URL schemes, 20 different authorities, 9 different ports, 10 different paths, 15 different path options, and 3 different query strings. testIsValid() is executed twice with different parameters.  Each permutations of the url has its own ResultPair to check that part of the URL is valid or not. The function will check to see if it fulfills the required conditions of a valid URL, if a ResultPair contain a false Boolean, any URL created using that pair will result in an invalid URL.
+
+Unit Test Data Examples
+Valid:
+http://google.com 
+http://google.com/ 
+http://localhost/test/index.html
+http://hostname/test/index.html
+http://президент.рф/WORLD/?hpt=sitenav 
+
+Invalid: 
+ http/1.2.3.4.:65636/..//file
+//256.256.256.256:65a/test1//file
+http:256.256.256.256:65a/$23
+://1.2.3.4.5:999999999999999999/test1?action=view
+http/go.1aa:65535/t123?action=view;
+
+Unit Test Techniques 		
+The Unit tests developed in Assignment 3 were similar but of a much smaller scale. Also the systems tests are much more complex with not only classes and entire libraries but also  different functions for each kind of test. The URL validator itself has its own constructors and methods for different tests. Inside the URLValidatorTest.java there is a huge range of test inputs.  There are hardcoded test inputs, there are random test inputs, there is extensive parsing of input and output data. The testing itself is very intricate. The inputs are so intricate as to imagine the most amazing boundaries one can imagine. Worldwide in scope apparently, by using the addresses of different countries. There are also different containers used within the testing from creating arrays of constructors to take inputs both hardcoded and generated  to creating functions for specific hard coded inputs and/or parameters of various URLs the system tests are quite extensive. Also, the amount of assertions (upwards of more than a couple hundred really reveal how very small our assignment 3 tests are in comparison to real world application test suites. 		
+Team Work 
+Tingting Lin created and checkout  the new FinalProject-PartA branch, and got the latest files from the class repository. Give the total number of the URLs it is testing and explain how it is building all the URLs.
+
+Daniel unit describes how unit tests from Assignment 3 differ from real-world tests in URL Validator's testIsValid() and describe the differences in terms of concepts & complexity
+
+Milo Chase described in detail how the isValidTest() function works as well as gave examples of valid urls.				
