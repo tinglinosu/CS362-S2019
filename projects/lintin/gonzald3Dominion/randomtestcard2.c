@@ -59,11 +59,10 @@ int main() {
         memcpy(&testG, &G, sizeof(struct gameState));
         
         printf("hand count before play village = %d\n", testG.handCount[thisPlayer]);
-	    printf("deck count before play village = %d\n", testG.deckCount[thisPlayer]);
+        printf("deck count before play village = %d\n", testG.deckCount[thisPlayer]);
         printf("#coins before play village = %d\n", testG.deckCount[thisPlayer]);
 
-        villageCardEffect(thisPlayer, &testG, handpos);
-
+        villageCard(&testG, handpos);
 
         newCards = 1;
         xtraCoins = 0;
