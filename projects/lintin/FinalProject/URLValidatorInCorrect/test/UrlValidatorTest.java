@@ -16,7 +16,7 @@
  */
 
 import junit.framework.TestCase;
-
+import java.util.Random;
 /**
  * Performs Validation Test for url validations.
  *
@@ -334,7 +334,7 @@ protected void setUp() {
     static boolean incrementTestPartsIndex(int[] testPartsIndex, Object[] testParts) {
       boolean carry = true;  //add 1 to lowest order part.
       boolean maxIndex = true;
-      for (int testPartsIndexIndex = testPartsIndex.length; testPartsIndexIndex >= 0; --testPartsIndexIndex) {
+      for (int testPartsIndexIndex = testPartsIndex.length - 1; testPartsIndexIndex >= 0; --testPartsIndexIndex) {//Bug1, to fix it, testPartsIndexIndex = testPartsIndex.length - 1
           int index = testPartsIndex[testPartsIndexIndex];
          ResultPair[] part = (ResultPair[]) testParts[testPartsIndexIndex];
          maxIndex &= (index == (part.length - 1));
@@ -598,6 +598,108 @@ protected void setUp() {
                             new ResultPair("not_valid", false), // underscore not allowed
                             new ResultPair("HtTp", true),
                             new ResultPair("telnet", false)};
+
+    public void randomURL() {
+
+        String SchemeTrue[] = new String[3];
+        SchemeTrue[0] ="http://";
+        SchemeTrue [1] ="ftp://";
+        SchemeTrue [2] ="h3t://";
+
+        String SchemeFalse[] = new String[5];
+        SchemeFalse[0] ="3ht://";
+        SchemeFalse[1] ="http:/";
+        SchemeFalse[2] ="http:";
+        SchemeFalse[3] ="http/";
+        SchemeFalse[4] ="://";
+
+
+        String AuthorityTrue[] = new String[6];
+        AuthorityTrue[0]= "www.google.com.";
+        AuthorityTrue[1]= "go.com";
+        AuthorityTrue[2]= "go.au";
+        AuthorityTrue[3]= "0.0.0.0";
+        AuthorityTrue[4]= "255.255.255.255";
+        AuthorityTrue[5]= "go.cc";
+
+        String AuthorityFalse[] = new String[13];
+        AuthorityFalse[0]= "256.256.256.256";
+        AuthorityTrue [1]= "255.com";
+        AuthorityFalse[2]= "1.2.3.4.5";
+        AuthorityFalse[3]= "1.2.3.4.";
+        AuthorityFalse[4]= "1.2.3";
+        AuthorityFalse[5]= ".1.2.3.4";
+        AuthorityFalse[6]= "go.a";
+        AuthorityFalse[7]= "go.a1a";
+        AuthorityFalse[8]= "go.1aa";
+        AuthorityFalse[9]= "aaa.";
+        AuthorityFalse[10]= ".aaa";
+        AuthorityFalse[11]= "aaa";
+        AuthorityFalse[12]= "";
+
+
+        String PortTrue[] = new String[4];
+        PortTrue[0] = ":80";
+        PortTrue[1] = ":65535";  // max possible
+        PortTrue[2] = ":0";
+        PortTrue[3] = "";
+
+        String PortFalse[] = new String[5];
+        PortFalse[0] = ":65536";  // max possible +1
+        PortFalse[1] = ":-1";
+        PortFalse[2] = ":65636";
+        PortFalse[3] = ":999999999999999999";
+        PortFalse[4] = ":65a";
+
+
+        String PathTrue[] = new String[6];
+        PathTrue[0] = "/test1";
+        PathTrue[1] = "/t123";
+        PathTrue[2] = "/$23";
+        PathTrue[3] = "/test1/";
+        PathTrue[4] = "";
+        PathTrue[5] = "/test1/file";
+
+
+        String PathFalse[] = new String[4];
+        PathFalse[0] = "/..";
+        PathFalse[1] = "/../";
+        PathFalse[2] = "/..//file";
+        PathFalse[3] = "/test1//file";
+
+
+        String QueryTrue[] = {"?action=view", "?action=edit&mode=up", ""};
+
+        UrlValidator urlValidator = new UrlValidator(null, null, UrlValidator.ALLOW_ALL_SCHEMES);
+
+        String ValidUrlToTest;
+
+        for (int i = 0; i < SchemeTrue.length; i++) {
+            for (int j = 0; j < AuthorityTrue.length; j++ ) {
+                for (int k = 0; k < PortTrue.length; k++) {
+                    for (int l = 0; l < PathTrue.length; l++) {
+                        for (int m = 0; m < QueryTrue.length; m++) {
+                            ValidUrlToTest = SchemeTrue[i] + AuthorityTrue[j] + PortTrue[k] + PathTrue[l] + QueryTrue[m];
+                        assertTrue(urlValidator.isValid(ValidUrlToTest));
+                        }
+                    }
+                }
+
+            }
+        }
+
+
+
+
+
+    }
+
+
+
+
+
+
+
 
 
 }
