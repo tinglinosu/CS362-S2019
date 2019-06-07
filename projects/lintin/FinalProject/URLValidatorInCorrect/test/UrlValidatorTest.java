@@ -600,18 +600,19 @@ public class UrlValidatorTest extends TestCase {
             new ResultPair("not_valid", false), // underscore not allowed
             new ResultPair("HtTp", true),
             new ResultPair("telnet", false)};
-
-    public void testBase() {
-        System.out.println("\n============ Start Base testing ============\n");
-        UrlValidator urlVal = new UrlValidator(UrlValidator.ALLOW_ALL_SCHEMES);
-        assertTrue(urlVal.isValid("https://www.google.com/"));
-        System.out.println("\n============ SUCCESS: Base Testing complete ============\n");
-    }
+//
+//    public void testBase() {
+//        System.out.println("\n============ Start Base testing ============\n");
+//        UrlValidator urlVal = new UrlValidator(UrlValidator.ALLOW_ALL_SCHEMES);
+//        assertTrue(urlVal.isValid("https://www.google.com/"));
+//        System.out.println("\n============ SUCCESS: Base Testing complete ============\n");
+//    }
 
     public void testScheme() {
         UrlValidator urlVal = new UrlValidator(null, null, UrlValidator.ALLOW_ALL_SCHEMES);
+       // System.out.println("\n============ Unit test ============");
 
-        System.out.println("\n============ Start testing Url Scheme ============\n");
+        System.out.println("\ntesting Url Scheme ...\n");
 
         assertTrue(urlVal.isValid("ftp://www.google.com/"));
         assertTrue(urlVal.isValid("h3t://www.google.com/"));
@@ -622,13 +623,13 @@ public class UrlValidatorTest extends TestCase {
         assertFalse(urlVal.isValid("://www.google.com/"));
 
 
-        System.out.println("\n============ SUCCESS: testing Url Scheme complete ============\n");
+        System.out.println("\nSUCCESS: testing Url Scheme complete\n");
  }
 
     public void testAuthority() {
         UrlValidator urlVal = new UrlValidator(null, null, UrlValidator.ALLOW_ALL_SCHEMES);
 
-        System.out.println("\n============ Start testing Url Authority ============\n");
+        System.out.println("\nStart testing Url Authority...\n");
 
         assertTrue(urlVal.isValid("https://go.com"));
         assertTrue(urlVal.isValid("http://go.com"));
@@ -663,14 +664,14 @@ public class UrlValidatorTest extends TestCase {
 //                new ResultPair("aaa", false),
 //                new ResultPair("", false)
 
-        System.out.println("\n============ SUCCESS: testing Url Authority complete ============\n");
+        System.out.println("\nSUCCESS: testing Url Authority complete\n");
 
     }
 
     public void testPort() {
         UrlValidator urlVal = new UrlValidator(null, null, UrlValidator.ALLOW_ALL_SCHEMES);
 
-        System.out.println("\n============ Start testing Url Port ============\n");
+        System.out.println("\nStart testing Url Port...\n");
 
         assertTrue(urlVal.isValid("http://255.com:65535"));
         assertTrue(urlVal.isValid("http://0.0.0.0:0"));
@@ -679,7 +680,7 @@ public class UrlValidatorTest extends TestCase {
         assertFalse(urlVal.isValid("http://255.com:-1"));
         assertFalse(urlVal.isValid("http://255.com:65a"));
 
-        System.out.println("\n============ SUCCESS: testing Url Port complete ============\n");
+        System.out.println("\nSUCCESS: testing Url Port complete\n");
 
 
 //        new ResultPair(":65535", true), // max possible
@@ -697,8 +698,7 @@ public class UrlValidatorTest extends TestCase {
 
         UrlValidator urlVal = new UrlValidator(null, null, UrlValidator.ALLOW_ALL_SCHEMES);
 
-        System.out.println("\n============ Start testing Url Path ============\n");
-
+        System.out.println("\nStart testing Url path...\n");
         assertTrue(urlVal.isValid("http://go.au:0/test1"));
         assertTrue(urlVal.isValid("http://0.0.0.0:80/t123"));
         assertTrue(urlVal.isValid("http://go.au:0/$23"));
@@ -710,7 +710,7 @@ public class UrlValidatorTest extends TestCase {
         assertFalse(urlVal.isValid("http://go.au:0/..//file"));
         assertFalse(urlVal.isValid("http://go.au:0/test1//file"));
 
-        System.out.println("\n============ SUCCESS: testing Url Path complete ============\n");
+        System.out.println("\nSUCCESS: testing Url Path complete\n");
 
 //        ResultPair[] testPath = {new ResultPair("/test1", true),
 //                new ResultPair("/t123", true),
@@ -729,13 +729,13 @@ public class UrlValidatorTest extends TestCase {
     public void testQuery() {
         UrlValidator urlVal = new UrlValidator(null, null, UrlValidator.ALLOW_ALL_SCHEMES);
 
-        System.out.println("\n============ Start testing Url Query ============\n");
+        System.out.println("\nStart testing Url Query...\n");
 
         assertTrue(urlVal.isValid("http://go.au:0/$23?action=edit&mode=up"));
         assertTrue(urlVal.isValid("http://www.google.com:80/test1?action=view"));
 
-        System.out.println("\n============ SUCCESS: testing Url Query complete ============\n");
-        System.out.println("\n============ SUCCESS: All Unit test complete ============\n");
+        System.out.println("\nSUCCESS: testing Url Query complete\n");
+       // System.out.println("\nSUCCESS: All Unit test complete\n");
 
     }
 
