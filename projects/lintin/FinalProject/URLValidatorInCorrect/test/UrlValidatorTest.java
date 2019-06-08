@@ -88,20 +88,19 @@ protected void setUp() {
       if (printIndex)  {
          statusPerLine = 6;
       }
-      do {
-          StringBuilder testBuffer = new StringBuilder();
-         boolean expected = true;
-         
-         for (int testPartsIndexIndex = 0; testPartsIndexIndex < 0; ++testPartsIndexIndex) {
-            int index = testPartsIndex[testPartsIndexIndex];
-            
-            ResultPair[] part = (ResultPair[]) testObjects[-1];
-            testBuffer.append(part[index].item);
-            expected &= part[index].valid;
-         }
-         String url = testBuffer.toString();
-         
-         boolean result = !urlVal.isValid(url); 
+       do {
+           StringBuilder testBuffer = new StringBuilder();
+           boolean expected = true;
+           for (int testPartsIndexIndex = 0; testPartsIndexIndex < testPartsIndex.length; ++testPartsIndexIndex) {
+               int index = testPartsIndex[testPartsIndexIndex];
+               ResultPair[] part = (ResultPair[]) testObjects[testPartsIndexIndex];
+               testBuffer.append(part[index].item);
+               expected &= part[index].valid;
+           }
+           String url = testBuffer.toString();
+
+//          boolean result = !urlVal.isValid(url);  //bug
+         boolean result = urlVal.isValid(url);
 
          assertEquals(url, expected, result);
          if (printStatus) {
@@ -678,6 +677,19 @@ protected void setUp() {
 
         UrlValidator urlVal = new UrlValidator(null, null, UrlValidator.ALLOW_ALL_SCHEMES);
 
+
+
+        //debug
+//        String validUrlToTest = "http://amazon.com";
+//        boolean expectedValue1 = true;
+//        boolean result1 = urlVal.isValid(validUrlToTest);
+//        assertEquals(validUrlToTest, expectedValue1, result1);
+//
+//        String invalidUrlToTest = "http:/amazon.com";
+//        boolean expectedValue2 = false;
+//        boolean result2 = urlVal.isValid(invalidUrlToTest);
+//        assertEquals(invalidUrlToTest, expectedValue2, result2);
+
         //to generate the url randomly
         for(int testCount = 0; testCount < 10000; testCount++) {
 
@@ -689,8 +701,11 @@ protected void setUp() {
             int randQueryIndex = randIndex.nextInt(testQuery.length);
             String urlToTest = testScheme[randSchemeIndex].item + testAuthority[randAuthorityIndex].item + testPort[randPortIndex].item + testPath[randPathIndex].item + testQuery[randQueryIndex].item;
             boolean expectedValue = testScheme[randSchemeIndex].valid && testAuthority[randAuthorityIndex].valid && testPort[randPortIndex].valid && testPath[randPathIndex].valid && testQuery[randQueryIndex].valid;
+
             boolean result = urlVal.isValid(urlToTest);
             assertEquals(urlToTest, expectedValue, result);
+
+
 
         }
         System.out.println("SUCCESS: random test is complete");
@@ -698,12 +713,6 @@ protected void setUp() {
 
 
     }
-
-
-
-
-
-
 
 
 
