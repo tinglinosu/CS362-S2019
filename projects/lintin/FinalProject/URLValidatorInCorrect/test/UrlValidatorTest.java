@@ -101,7 +101,8 @@ protected void setUp() {
          }
          String url = testBuffer.toString();
          
-         boolean result = !urlVal.isValid(url);
+         boolean result = !urlVal.isValid(url); 
+
          assertEquals(url, expected, result);
          if (printStatus) {
             if (printIndex) {
@@ -334,14 +335,14 @@ protected void setUp() {
     static boolean incrementTestPartsIndex(int[] testPartsIndex, Object[] testParts) {
       boolean carry = true;  //add 1 to lowest order part.
       boolean maxIndex = true;
-      for (int testPartsIndexIndex = testPartsIndex.length - 1; testPartsIndexIndex >= 0; --testPartsIndexIndex) {//Bug1, to fix it, testPartsIndexIndex = testPartsIndex.length - 1
+      for (int testPartsIndexIndex = testPartsIndex.length - 1; testPartsIndexIndex >= 0; --testPartsIndexIndex) {//Bug
           int index = testPartsIndex[testPartsIndexIndex];
          ResultPair[] part = (ResultPair[]) testParts[testPartsIndexIndex];
          maxIndex &= (index == (part.length - 1));
          
          if (carry) {
             if (index < part.length - 1) {
-            	index--;
+            	index++;   //BUG
                testPartsIndex[testPartsIndexIndex] = index;
                carry = false;
             } else {
@@ -599,96 +600,100 @@ protected void setUp() {
                             new ResultPair("HtTp", true),
                             new ResultPair("telnet", false)};
 
-    public void randomURL() {
-
-        String SchemeTrue[] = new String[3];
-        SchemeTrue[0] ="http://";
-        SchemeTrue [1] ="ftp://";
-        SchemeTrue [2] ="h3t://";
-
-        String SchemeFalse[] = new String[5];
-        SchemeFalse[0] ="3ht://";
-        SchemeFalse[1] ="http:/";
-        SchemeFalse[2] ="http:";
-        SchemeFalse[3] ="http/";
-        SchemeFalse[4] ="://";
 
 
-        String AuthorityTrue[] = new String[6];
-        AuthorityTrue[0]= "www.google.com.";
-        AuthorityTrue[1]= "go.com";
-        AuthorityTrue[2]= "go.au";
-        AuthorityTrue[3]= "0.0.0.0";
-        AuthorityTrue[4]= "255.255.255.255";
-        AuthorityTrue[5]= "go.cc";
 
-        String AuthorityFalse[] = new String[13];
-        AuthorityFalse[0]= "256.256.256.256";
-        AuthorityTrue [1]= "255.com";
-        AuthorityFalse[2]= "1.2.3.4.5";
-        AuthorityFalse[3]= "1.2.3.4.";
-        AuthorityFalse[4]= "1.2.3";
-        AuthorityFalse[5]= ".1.2.3.4";
-        AuthorityFalse[6]= "go.a";
-        AuthorityFalse[7]= "go.a1a";
-        AuthorityFalse[8]= "go.1aa";
-        AuthorityFalse[9]= "aaa.";
-        AuthorityFalse[10]= ".aaa";
-        AuthorityFalse[11]= "aaa";
-        AuthorityFalse[12]= "";
+    public void testrandomURL() {
+
+        /**
+         * The data given below approximates the 4 parts of a URL
+         * <scheme>://<authority><path>?<query> except that the port number
+         * is broken out of authority to increase the number of permutations.
+         * A complete URL is composed of a scheme+authority+port+path+query,
+         * all of which must be individually valid for the entire URL to be considered
+         * valid.
+         */
+        System.out.println("Star random testing...");
+        ResultPair[] testScheme = {
+                new ResultPair("http://", true),
+                new ResultPair("ftp://", true),
+                new ResultPair("h3t://", true),
+                new ResultPair("3ht://", false),
+                new ResultPair("http:/", false),
+                new ResultPair("http:", false),
+                new ResultPair("http/", false),
+                new ResultPair("://", false)};
+
+        ResultPair[] testAuthority = {
+                new ResultPair("www.youtube.com", true),
+                new ResultPair("www.google.com.", true),
+                new ResultPair("go.com", true),
+                new ResultPair("go.au", true),
+                new ResultPair("0.0.0.0", true),
+                new ResultPair("255.255.255.255", true),
+                new ResultPair("256.256.256.256", false),
+                new ResultPair("255.com", true),
+                new ResultPair("1.2.3.4.6", false),
+                new ResultPair("1.2.3.4.", false),
+                new ResultPair("1.2.3", false),
+                new ResultPair(".1.2.3.4", false),
+                new ResultPair("go.a", false),
+                new ResultPair("go.a1a", false),
+                new ResultPair("go.cc", true),
+                new ResultPair("go.1aa", false),
+                new ResultPair("bbb.", false),
+                new ResultPair(".bbb", false),
+                new ResultPair("bbb", false),
+                new ResultPair("", false)
+        };
+        ResultPair[] testPort = {
+                new ResultPair(":830", true),
+                new ResultPair(":65535", true), // max possible
+                new ResultPair(":0", true),
+                new ResultPair("", true),
+                new ResultPair(":-1", false),
+                new ResultPair(":65636", false),
+                new ResultPair(":88888", false),
+                new ResultPair(":65a", false)
+        };
+        ResultPair[] testPath = {
+                new ResultPair("/test1", true),
+                new ResultPair("/t123", true),
+                new ResultPair("/$23", true),
+                new ResultPair("/..", false),
+                new ResultPair("/../", false),
+                new ResultPair("/test1/", true),
+                new ResultPair("", true),
+                new ResultPair("/test1/file", true),
+                new ResultPair("/..//file", false),
+                new ResultPair("/test1//file", false)
+        };
 
 
-        String PortTrue[] = new String[4];
-        PortTrue[0] = ":80";
-        PortTrue[1] = ":65535";  // max possible
-        PortTrue[2] = ":0";
-        PortTrue[3] = "";
+        ResultPair[] testQuery = {
+                new ResultPair("?action=view", true),
+                new ResultPair("?action=edit&mode=up", true),
+                new ResultPair("", true)
+        };
 
-        String PortFalse[] = new String[5];
-        PortFalse[0] = ":65536";  // max possible +1
-        PortFalse[1] = ":-1";
-        PortFalse[2] = ":65636";
-        PortFalse[3] = ":999999999999999999";
-        PortFalse[4] = ":65a";
+        UrlValidator urlVal = new UrlValidator(null, null, UrlValidator.ALLOW_ALL_SCHEMES);
 
+        //to generate the url randomly
+        for(int testCount = 0; testCount < 10000; testCount++) {
 
-        String PathTrue[] = new String[6];
-        PathTrue[0] = "/test1";
-        PathTrue[1] = "/t123";
-        PathTrue[2] = "/$23";
-        PathTrue[3] = "/test1/";
-        PathTrue[4] = "";
-        PathTrue[5] = "/test1/file";
+            Random randIndex = new Random();
+            int randSchemeIndex = randIndex.nextInt(testScheme.length);
+            int randAuthorityIndex = randIndex.nextInt(testAuthority.length);
+            int randPortIndex = randIndex.nextInt(testPort.length);
+            int randPathIndex = randIndex.nextInt(testPath.length);
+            int randQueryIndex = randIndex.nextInt(testQuery.length);
+            String urlToTest = testScheme[randSchemeIndex].item + testAuthority[randAuthorityIndex].item + testPort[randPortIndex].item + testPath[randPathIndex].item + testQuery[randQueryIndex].item;
+            boolean expectedValue = testScheme[randSchemeIndex].valid && testAuthority[randAuthorityIndex].valid && testPort[randPortIndex].valid && testPath[randPathIndex].valid && testQuery[randQueryIndex].valid;
+            boolean result = urlVal.isValid(urlToTest);
+            assertEquals(urlToTest, expectedValue, result);
 
-
-        String PathFalse[] = new String[4];
-        PathFalse[0] = "/..";
-        PathFalse[1] = "/../";
-        PathFalse[2] = "/..//file";
-        PathFalse[3] = "/test1//file";
-
-
-        String QueryTrue[] = {"?action=view", "?action=edit&mode=up", ""};
-
-        UrlValidator urlValidator = new UrlValidator(null, null, UrlValidator.ALLOW_ALL_SCHEMES);
-
-        String ValidUrlToTest;
-
-        for (int i = 0; i < SchemeTrue.length; i++) {
-            for (int j = 0; j < AuthorityTrue.length; j++ ) {
-                for (int k = 0; k < PortTrue.length; k++) {
-                    for (int l = 0; l < PathTrue.length; l++) {
-                        for (int m = 0; m < QueryTrue.length; m++) {
-                            ValidUrlToTest = SchemeTrue[i] + AuthorityTrue[j] + PortTrue[k] + PathTrue[l] + QueryTrue[m];
-                        assertTrue(urlValidator.isValid(ValidUrlToTest));
-                        }
-                    }
-                }
-
-            }
         }
-
-
+        System.out.println("SUCCESS: random test is complete");
 
 
 
