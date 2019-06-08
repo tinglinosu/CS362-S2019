@@ -16,7 +16,7 @@
  */
 
 import junit.framework.TestCase;
-
+import java.util.Random;
 /**
  * Performs Validation Test for url validations.
  *
@@ -91,17 +91,16 @@ public class UrlValidatorTest extends TestCase {
         do {
             StringBuilder testBuffer = new StringBuilder();
             boolean expected = true;
-
-            for (int testPartsIndexIndex = 0; testPartsIndexIndex < 0; ++testPartsIndexIndex) {
+            for (int testPartsIndexIndex = 0; testPartsIndexIndex < testPartsIndex.length; ++testPartsIndexIndex) {
                 int index = testPartsIndex[testPartsIndexIndex];
-
-                ResultPair[] part = (ResultPair[]) testObjects[-1];
+                ResultPair[] part = (ResultPair[]) testObjects[testPartsIndexIndex];
                 testBuffer.append(part[index].item);
                 expected &= part[index].valid;
             }
             String url = testBuffer.toString();
 
-            boolean result = !urlVal.isValid(url);
+          boolean result =  urlVal.isValid(url);  //Bug fixed
+
             assertEquals(url, expected, result);
             if (printStatus) {
                 if (printIndex) {
@@ -334,16 +333,14 @@ public class UrlValidatorTest extends TestCase {
     static boolean incrementTestPartsIndex(int[] testPartsIndex, Object[] testParts) {
         boolean carry = true;  //add 1 to lowest order part.
         boolean maxIndex = true;
-//        for (int testPartsIndexIndex = testPartsIndex.length; testPartsIndexIndex >= 0; --testPartsIndexIndex) {  //Bug 4
-        for (int testPartsIndexIndex = testPartsIndex.length - 1; testPartsIndexIndex >= 0; --testPartsIndexIndex) { //fix Bug4
+        for (int testPartsIndexIndex = testPartsIndex.length - 1; testPartsIndexIndex >= 0; --testPartsIndexIndex) {//Bug fixed
             int index = testPartsIndex[testPartsIndexIndex];
             ResultPair[] part = (ResultPair[]) testParts[testPartsIndexIndex];
             maxIndex &= (index == (part.length - 1));
 
             if (carry) {
                 if (index < part.length - 1) {
-//                    index--;      //Bug 5
-                    index++;      //fix Bug 5
+                    index++;   //BUG fixed
                     testPartsIndex[testPartsIndexIndex] = index;
                     carry = false;
                 } else {
@@ -600,17 +597,9 @@ public class UrlValidatorTest extends TestCase {
             new ResultPair("not_valid", false), // underscore not allowed
             new ResultPair("HtTp", true),
             new ResultPair("telnet", false)};
-//
-//    public void testBase() {
-//        System.out.println("\n============ Start Base testing ============\n");
-//        UrlValidator urlVal = new UrlValidator(UrlValidator.ALLOW_ALL_SCHEMES);
-//        assertTrue(urlVal.isValid("https://www.google.com/"));
-//        System.out.println("\n============ SUCCESS: Base Testing complete ============\n");
-//    }
 
     public void testScheme() {
         UrlValidator urlVal = new UrlValidator(null, null, UrlValidator.ALLOW_ALL_SCHEMES);
-       // System.out.println("\n============ Unit test ============");
 
         System.out.println("\ntesting Url Scheme ...\n");
 
@@ -624,7 +613,7 @@ public class UrlValidatorTest extends TestCase {
 
 
         System.out.println("\nSUCCESS: testing Url Scheme complete\n");
- }
+    }
 
     public void testAuthority() {
         UrlValidator urlVal = new UrlValidator(null, null, UrlValidator.ALLOW_ALL_SCHEMES);
@@ -641,28 +630,6 @@ public class UrlValidatorTest extends TestCase {
         assertFalse(urlVal.isValid("https://go.a1a"));
         assertFalse(urlVal.isValid("https://1.2.3.4.5"));
 
-
-
-
-//        new ResultPair("www.google.com.", true),
-//                new ResultPair("go.com", true),
-//                new ResultPair("go.au", true),
-//                new ResultPair("0.0.0.0", true),
-//                new ResultPair("255.255.255.255", true),
-//                new ResultPair("http://255.255.255.255", false),
-//                new ResultPair("255.com", true),
-//                new ResultPair("1.2.3.4.5", false),
-//                new ResultPair("1.2.3.4.", false),
-//                new ResultPair("1.2.3", false),
-//                new ResultPair(".1.2.3.4", false),
-//                new ResultPair("go.a", false),
-//                new ResultPair("go.a1a", false),
-//                new ResultPair("go.cc", true),
-//                new ResultPair("go.1aa", false),
-//                new ResultPair("aaa.", false),
-//                new ResultPair(".aaa", false),
-//                new ResultPair("aaa", false),
-//                new ResultPair("", false)
 
         System.out.println("\nSUCCESS: testing Url Authority complete\n");
 
@@ -682,15 +649,6 @@ public class UrlValidatorTest extends TestCase {
 
         System.out.println("\nSUCCESS: testing Url Port complete\n");
 
-
-//        new ResultPair(":65535", true), // max possible
-//                new ResultPair(":65536", false), // max possible +1
-//                new ResultPair(":0", true),
-//                new ResultPair("", true),
-//                new ResultPair(":-1", false),
-//                new ResultPair(":65636", false),
-//                new ResultPair(":999999999999999999", false),
-//                new ResultPair(":65a", false)
 
     }
 
@@ -712,17 +670,7 @@ public class UrlValidatorTest extends TestCase {
 
         System.out.println("\nSUCCESS: testing Url Path complete\n");
 
-//        ResultPair[] testPath = {new ResultPair("/test1", true),
-//                new ResultPair("/t123", true),
-//                new ResultPair("/$23", true),
-//                new ResultPair("/..", false),
-//                new ResultPair("/../", false),
-//                new ResultPair("/test1/", true),
-//                new ResultPair("", true),
-//                new ResultPair("/test1/file", true),
-//                new ResultPair("/..//file", false),
-//                new ResultPair("/test1//file", false)
-//        };
+
 
     }
 
@@ -735,8 +683,9 @@ public class UrlValidatorTest extends TestCase {
         assertTrue(urlVal.isValid("http://www.google.com:80/test1?action=view"));
 
         System.out.println("\nSUCCESS: testing Url Query complete\n");
-       // System.out.println("\nSUCCESS: All Unit test complete\n");
+        // System.out.println("\nSUCCESS: All Unit test complete\n");
 
     }
+
 
 }
